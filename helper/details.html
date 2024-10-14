@@ -88,26 +88,29 @@
             download: true,
             header: true,
             complete: function(results) {
-                const data = results.data[applicationId];
+                const data = results.data;
                 const keyDetailsDiv = document.getElementById("keyDetails");
                 const detailsDiv = document.getElementById("details");
+
+                // Get the specific application using the applicationId
+                const applicationData = data[applicationId];
 
                 // Hide spinner and show content once data is loaded
                 document.getElementById('loadingSpinner').style.display = 'none';
                 keyDetailsDiv.style.display = 'block';
 
                 // Display key details with specific labels (without copy button for Timestamp)
-                keyDetailsDiv.appendChild(createKeyDetail('Timestamp', data['Timestamp'], false));
-                keyDetailsDiv.appendChild(createKeyDetail('Email', data['Email Address']));
-                keyDetailsDiv.appendChild(createKeyDetail('In-Game Name', data['What is your in-game name?']));
-                keyDetailsDiv.appendChild(createKeyDetail('Account ID', data['What is your server account ID?']));
+                keyDetailsDiv.appendChild(createKeyDetail('Timestamp', applicationData['Timestamp'], false));
+                keyDetailsDiv.appendChild(createKeyDetail('Email', applicationData['Email Address']));
+                keyDetailsDiv.appendChild(createKeyDetail('In-Game Name', applicationData['What is your in-game name?']));
+                keyDetailsDiv.appendChild(createKeyDetail('Account ID', applicationData['What is your server account ID?']));
 
                 // Display the rest of the details
-                for (let key in data) {
+                for (let key in applicationData) {
                     if (!['Timestamp', 'Email Address', 'What is your in-game name?', 'What is your server account ID?'].includes(key)) {
                         const p = document.createElement("p");
                         p.className = "detail-item";
-                        p.innerHTML = `<strong>${key}:</strong> ${data[key]}`;
+                        p.innerHTML = `<strong>${key}:</strong> ${applicationData[key]}`;
                         detailsDiv.appendChild(p);
                     }
                 }

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helper Application Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="details-styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+</head>
+<body>
+    <div class="back-btn">
+        <button onclick="goBack()">Back to Applications</button>
+    </div>
+    <div class="container">
+        <h1>Application Details
+            <button class="print-btn" onclick="printPage()" style="float: right; background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer;">
+                Print
+            </button>
+        </h1>
+
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="spinner-container">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Container for the key details -->
+        <div id="keyDetails" class="key-details" style="display: none;">
+            <!-- Key details will be populated here -->
+        </div>
+
+        <!-- Container for the rest of the details -->
+        <div id="details" class="details-section" style="display: none;">
+            <!-- Additional details will be populated here -->
+        </div>
+    </div>
+
+    <script>
+        const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSLC5zWlWm8Nqe95qqvbiC_5rAj9YnfjxwQjxSYce4cOJhHDdrMFqWU6W1UYbXxJoeFcfnUfjm0xcpG/pub?output=csv";
+
+        // Get the ID from the query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const applicationId = urlParams.get('id');
+
+        // Function to copy text to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Copied to clipboard: " + text);
+            });
+        }
+
+        // Function to create a key detail with a copy button
+        function createKeyDetail(label, value, addCopyButton = true) {
+            const detail = document.createElement('p');
+            const valueWrapper = document.createElement('div');
+            valueWrapper.className = 'value-and-button';
+
+            // Add the value
+            valueWrapper.innerHTML = `<strong>${label}:</strong> <span>${value}</span>`;
+
+            // Conditionally add the copy button (skip for Timestamp)
+            if (addCopyButton) {
+                const copyButton = document.createElement('button');
+                copyButton.className = 'copy-btn';
+                copyButton.innerText = 'Copy';
+                copyButton.onclick = () => copyToClipboard(value);
+                valueWrapper.appendChild(copyButton);
+            }
+
+            detail.appendChild(valueWrapper);
+            return detail;
+        }
+
+        // Function to return to applications page
+        function goBack() {
+            window.location.href = "index.html"; // Assuming your index.html contains the list of applications
+        }
+
+        // Function to print the page
+        function printPage() {
+            window.print();
+        }
+
+        // Start loading the data
+        Papa.parse(csvUrl, {
+            download: true,
+            header: true,
+            complete: function(results) {
+                const data = results.data[applicationId];
+                const keyDetailsDiv = document.getElementById("keyDetails");
+                const detailsDiv = document.getElementById("details");
+
+                // Hide spinner and show content once data is loaded
+                document.getElementById('loadingSpinner').style.display = 'none';
+                keyDetailsDiv.style.display = 'block';
+
+                // Display key details with specific labels (without copy button for Timestamp)
+                keyDetailsDiv.appendChild(createKeyDetail('Timestamp', data['Timestamp'], false));
+                keyDetailsDiv.appendChild(createKeyDetail('Email', data['Email Address']));
+                keyDetailsDiv.appendChild(createKeyDetail('In-Game Name', data['What is your in-game name?']));
+                keyDetailsDiv.appendChild(createKeyDetail('Account ID', data['What is your server account ID?']));
+
+                // Display the rest of the details
+                for (let key in data) {
+                    if (!['Timestamp', 'Email Address', 'What is your in-game name?', 'What is your server account ID?'].includes(key)) {
+                        const p = document.createElement("p");
+                        p.className = "detail-item";
+                        p.innerHTML = `<strong>${key}:</strong> ${data[key]}`;
+                        detailsDiv.appendChild(p);
+                    }
+                }
+
+                detailsDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

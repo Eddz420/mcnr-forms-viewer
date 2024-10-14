@@ -1,0 +1,40 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.container {
+    margin-top: 50px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.table {
+    margin-top: 20px;
+}
+
+.details-btn {
+    color: #fff;
+    background-color: #83a01d; /* Primary color for helper */
+    border-color: #83a01d; 
+}
+
+.spinner-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+.value-and-button {
+    display: flex;
+    align-items: center;
+}
+
+.copy-btn {
+    margin-left: 10px;
+    cursor: pointer;
+}

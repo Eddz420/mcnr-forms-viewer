@@ -11,7 +11,7 @@
 <body>
 
     <div class="back-btn">
-        <button onclick="goBack()">Back to Applications</button>
+        <button onclick="goBack()" class="btn btn-secondary">Back to Applications</button>
     </div>
 
     <!-- Loading Spinner -->
@@ -65,7 +65,7 @@
             // Conditionally add the copy button (skip for Timestamp)
             if (addCopyButton) {
                 const copyButton = document.createElement('button');
-                copyButton.className = 'copy-btn';
+                copyButton.className = 'copy-btn btn btn-outline-secondary btn-sm ml-2';
                 copyButton.innerText = 'Copy';
                 copyButton.onclick = () => copyToClipboard(value);
                 valueWrapper.appendChild(copyButton);

@@ -33,12 +33,10 @@
                 <!-- Data will be populated here -->
             </tbody>
         </table>
-
     </div>
 
     <script>
         const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSLC5zWlWm8Nqe95qqvbiC_5rAj9YnfjxwQjxSYce4cOJhHDdrMFqWU6W1UYbXxJoeFcfnUfjm0xcpG/pub?output=csv";
-
 
         // Start loading the data
         Papa.parse(csvUrl, {
@@ -47,8 +45,11 @@
             complete: function(results) {
                 const data = results.data;
 
+                // Create an array of objects with original index
+                const indexedData = data.map((row, index) => ({ ...row, originalIndex: index }));
+
                 // Sort data by timestamp (newest first)
-                data.sort((a, b) => new Date(b['Timestamp']) - new Date(a['Timestamp']));
+                indexedData.sort((a, b) => new Date(b['Timestamp']) - new Date(a['Timestamp']));
 
                 const tableBody = document.getElementById("applicationTable");
 
@@ -56,7 +57,7 @@
                 document.getElementById('loadingSpinner').style.display = 'none';
                 document.querySelector('.container').style.display = 'block';
 
-                data.forEach((row, index) => {
+                indexedData.forEach((row) => {
                     const tr = document.createElement("tr");
 
                     tr.innerHTML = `
@@ -64,7 +65,7 @@
                         <td>${row['Email Address']}</td>
                         <td>${row['What is your in-game name?']}</td>
                         <td>${row['What is your server account ID?']}</td>
-                        <td><a href="details.html?id=${index}" class="btn details-btn">Details</a></td>
+                        <td><a href="details.html?id=${row.originalIndex}" class="btn details-btn">Details</a></td>
                     `;
 
                     tableBody.appendChild(tr);

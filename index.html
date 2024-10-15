@@ -63,7 +63,7 @@
                 localStorage.setItem("sessionExpiry", sessionExpiry);
 
                 // Redirect to protected folder
-                window.location.href = '/protected/';
+                window.location.href = './protected/';
             } else {
                 errorElement.textContent = "Incorrect password. Please try again.";
             }
@@ -72,7 +72,7 @@
         function disconnect() {
             // Clear session data and reload the page
             localStorage.removeItem("sessionExpiry");
-            window.location.href = '/';
+            window.location.href = './';
         }
 
         // Auto redirect if already logged in
@@ -83,7 +83,7 @@
             if (sessionExpiry && Date.now() < sessionExpiry) {
                 // If session exists, show disconnect button
                 disconnectBtn.style.display = "block";
-                window.location.href = '/protected/'; // Redirect to default protected page
+                window.location.href = './protected/'; // Redirect to default protected page
             }
         };
     </script>

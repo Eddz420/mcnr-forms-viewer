@@ -1,9 +1,22 @@
+<script>
+    function checkSession() {
+        const sessionExpiry = localStorage.getItem("sessionExpiry");
+
+        const currentTime = new Date().getTime();
+
+        if (!sessionExpiry || currentTime > sessionExpiry) {
+            window.location.href = "/index.html";
+        }
+    }
+
+    checkSession();
+</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tester Application Details</title>
+    <title>Helper Application Details</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="details-styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
@@ -22,7 +35,7 @@
     </div>
 
     <div class="container" style="display: none; position: relative;">
-        <h1>Tester Application Details
+        <h1>Helper Application Details
             <button class="print-btn" onclick="printPage()">
                 Print
             </button>
@@ -38,7 +51,7 @@
         <!-- Container for the rest of the details -->
         <div id="details" class="details-section">
             <div class="general-section">
-                <h1>About the applicant</h1>
+                <h1>General Information</h1>
                 <div id="generalInfo">
                     <!-- General Information details will be populated here -->
                     <button id="copyGeneralInfoBtn" class="copy-discord-btn">Copy Discord Message</button>
@@ -46,17 +59,18 @@
             </div>
             
             <div class="general-section">
-                <h1>Scenario simulation</h1>
-                <div id="testingKnowledge">
-                    <!-- Testing Knowledge details will be populated here -->
-                    <button id="copyTestingKnowledgeBtn" class="copy-discord-btn">Copy Discord Message</button>
+                <h1>Helper Questions</h1>
+                <div id="helperQuestions">
+                    <!-- Helper specific questions will be populated here -->
+                    <button id="copyHelperQuestionsBtn" class="copy-discord-btn">Copy Discord Message</button>
                 </div>
             </div>
+
         </div>
     </div>
 
     <script>
-        const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfW7Rw8V6pp5HKih-yOD-YLj2APRBVuKsjoxr5if9w_ehB1KP87ckrF7LtuPqupGx2qHB1Lb22a-ZL/pub?output=csv";
+        const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSLC5zWlWm8Nqe95qqvbiC_5rAj9YnfjxwQjxSYce4cOJhHDdrMFqWU6W1UYbXxJoeFcfnUfjm0xcpG/pub?output=csv";
 
         // Get the ID from the query parameter
         const urlParams = new URLSearchParams(window.location.search);
@@ -98,7 +112,7 @@
                 const data = results.data[applicationId];
                 const keyDetailsDiv = document.getElementById("keyDetails");
                 const generalInfoDiv = document.getElementById("generalInfo");
-                const testingKnowledgeDiv = document.getElementById("testingKnowledge");
+                const helperQuestionsDiv = document.getElementById("helperQuestions");
 
                 // Hide spinner and show content once data is loaded
                 document.getElementById('loadingSpinner').style.display = 'none';
@@ -107,28 +121,16 @@
                 // Display key details without copy buttons
                 keyDetailsDiv.appendChild(createKeyDetail('Timestamp', data['Timestamp']));
                 keyDetailsDiv.appendChild(createKeyDetail('In-Game Name', data['What is your in-game name?']));
-                keyDetailsDiv.appendChild(createKeyDetail('Account ID', data['What is your in-game account ID?']));
-                keyDetailsDiv.appendChild(createKeyDetail('Discord Name', data['What is your Discord username?']));
-                keyDetailsDiv.appendChild(createKeyDetail('Forum Name', data['What is your forum username?']));
-                keyDetailsDiv.appendChild(createKeyDetail('GitHub Username', data['What is your GitHub username?']));
+                keyDetailsDiv.appendChild(createKeyDetail('Account ID', data['What is your server account ID?']));
                 keyDetailsDiv.appendChild(createKeyDetail('Email', data['Email Address']));
-                keyDetailsDiv.appendChild(createKeyDetail('Country (Timezone)', data['What country are you from?']+' ('+data['What is your country\'s timezone (GMT)?']+')'));
-                keyDetailsDiv.appendChild(createKeyDetail('Age', data['How old are you?']));
 
-
-                // Prepare the message for Discord
-                const discordMessage = `# Tester application - ${data['What is your in-game name?']}\n` +
+                // Prepare the message for Discord (Key Details)
+                const discordMessage = `# Helper application - ${data['What is your in-game name?']}\n` +
                     '```yaml\n' +
                     `Application date: '${data['Timestamp']}'\n` +
                     `Name: ${data['What is your in-game name?']}\n` +
-                    `AID: ${data['What is your in-game account ID?']}\n` +
-                    `Forum name: ${data['What is your forum username?']}\n` +
-                    `Discord: ${data['What is your Discord username?']}\n` +
-                    `GitHub: ${data['What is your GitHub username?']}\n` +
+                    `AID: ${data['What is your server account ID?']}\n` +
                     `Email: ${data['Email Address']}\n` +
-                    `Country: '${data['What country are you from?']} (${data['What is your country\'s timezone (GMT)?']})'\n` +
-                    `Age: ${data['How old are you?']}\n` +
-
                     '```';
 
                 // Add copy to clipboard functionality to the Discord message button
@@ -137,13 +139,7 @@
                 };
 
                 // Display General Information
-                const generalFields = [
-                    'Do you meet all the requirements to become an MCNR tester?',
-                    'How long have you played MCNR for?', 
-                    'How long have you played SA-MP for?', 
-                    'How many hours a MONTH, on average, are you able to be active on the server?', 
-                    'Do you have any previous testing or administrative experience (SA-MP or otherwise)? Please provide details.', 
-                ];
+                const generalFields = [ 'For how long have you played SA-MP?', 'For how long have you played MCNR?', 'Do you have any experience being a member of staff on any other SA-MP server, or any other game server for that matter?', 'What languages can you speak?' ];
 
                 generalFields.forEach(field => {
                     const p = document.createElement("p");
@@ -153,7 +149,7 @@
                 });
 
                 // Prepare the General Information Discord message
-                let generalInfoMessage = "# About the applicant\n";
+                let generalInfoMessage = "# General information\n";
                 generalFields.forEach(field => {
                     generalInfoMessage += `Q-  **${field}** \n\`\`\`diff\n${data[field]}\n\`\`\`\n`;
                 });
@@ -163,35 +159,29 @@
                     copyToClipboard(generalInfoMessage);
                 };
 
-                // Display Testing Knowledge
-                const testingFields = [
-                    'When I exit the bank I see a black screen and it never disappears. I have to relog every time I exit the bank.',
-                    'When I request my personal vehicle (Infernus), a police car spawns instead.',
-                    'My weapon skills reset to poor. I had professional level on all weapons and now they are all poor.',
-                    'I bought some armour but when I relogged it was gone.',
-                    'Explain (in many words) why you wish to become a tester and what you can do for MCNR.'
-                ];
+                // Display Helper Questions
+                const helperFields = ['Do you meet the following requirements?', 'My friend got banned for cheating, can you unban them?', 'I bought a car and got charged, but the car is not in my garage!', 'I am struggling to find the last 3 oysters. Can you help me find them?', 'I keep losing money because people keep robbing me. What can I do?', 'Every time I try to rob the bank I get arrested. What should I do to have better luck robbing the bank?', 'My game crashes every time I am sent to jail in Los Santos. Can you help?', 'I have forgotten the password to my account. Can you reset it for me?', 'I donated but my donation has not been verified. Can you help?', 'I installed the audio plugin but it isn\'t working.', 'How can I show the recent deaths on the screen like on some servers do on the right side of the screen?', 'Why do I lose my guns when I go to jail? How can I get them back?', 'Why does the tazer never work when I\'m a cop? It says out of range every time.', 'How do I apply to be an admin?', 'In as many words as possible, why do you want to be an MCNR helper?' ];
 
-                testingFields.forEach(field => {
+                helperFields.forEach(field => {
                     const p = document.createElement("p");
                     p.className = "detail-item";
                     p.innerHTML = `<strong>${field}:</strong> ${data[field]}`;
-                    testingKnowledgeDiv.appendChild(p);
+                    helperQuestionsDiv.appendChild(p);
                 });
 
-                // Prepare the Testing Knowledge Discord message
-                let testingKnowledgeMessage = "# Scenario simulation\n";
-                testingFields.forEach(field => {
-                    testingKnowledgeMessage += `Q-  **${field}** \n\`\`\`diff\n${data[field]}\n\`\`\`\n`;
+
+                let helperQuestionsMessage = "# Helper Questions\n";
+                helperFields.forEach(field => {
+                    helperQuestionsMessage += `Q-  **${field}** \n\`\`\`diff\n${data[field]}\n\`\`\`\n`;
                 });
 
-                // Add copy to clipboard functionality for Testing Knowledge
-                document.getElementById("copyTestingKnowledgeBtn").onclick = function() {
-                    copyToClipboard(testingKnowledgeMessage);
+                // Add copy to clipboard functionality for Helper Questions
+                document.getElementById("copyHelperQuestionsBtn").onclick = function() {
+                    copyToClipboard(helperQuestionsMessage);
                 };
+
             }
         });
     </script>
-
 </body>
 </html>

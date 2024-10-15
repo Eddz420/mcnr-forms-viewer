@@ -1,0 +1,39 @@
+body {
+    background-color: #f8f9fa;
+}
+.container {
+    margin-top: 50px;
+}
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+table {
+    width: 100%;
+    margin-top: 20px;
+}
+th, td {
+    text-align: center;
+    padding: 10px;
+}
+.details-btn {
+    color: #fff;
+    background-color: #f4882c; /* Moderator's primary color */
+    border-color: #f4882c; /* Border color */
+}
+.details-btn:hover {
+    background-color: #e77b29; /* Darker shade for hover effect */
+    border-color: #e77b29; /* Adjust border color for hover */
+}
+/* Spinner styles */
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+}
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+    color: #f4882c; /* Spinner color set to Moderator's primary color */
+}

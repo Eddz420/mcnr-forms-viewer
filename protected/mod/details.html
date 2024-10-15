@@ -1,0 +1,194 @@
+<script>
+    function checkSession() {
+        const sessionExpiry = localStorage.getItem("sessionExpiry");
+
+        const currentTime = new Date().getTime();
+
+        if (!sessionExpiry || currentTime > sessionExpiry) {
+            window.location.href = "/index.html";
+        }
+    }
+
+    checkSession();
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="details-styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+</head>
+<body>
+
+    <div class="back-btn">
+        <button onclick="goBack()" class="btn btn-secondary">Back to Applications</button>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="spinner-container" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+
+    <div class="container" style="display: none; position: relative;">
+        <h1>Application Details
+            <button class="print-btn" onclick="printPage()">
+                Print
+            </button>
+        </h1>
+
+        <!-- Container for the key details -->
+        <div id="keyDetails" class="key-details">
+            <!-- Button to copy the Discord message (Absolute positioned) -->
+            <button id="copyDiscordMessageBtn" class="copy-discord-btn">Copy Discord Message</button>
+            <!-- Key details will be populated here -->
+        </div>
+
+        <!-- Container for the rest of the details -->
+        <div id="details" class="details-section">
+            <div class="general-section">
+                <h1>General Information</h1>
+                <div id="generalInfo">
+                    <!-- General Information details will be populated here -->
+                    <button id="copyGeneralInfoBtn" class="copy-discord-btn">Copy Discord Message</button>
+                </div>
+            </div>
+            
+            <div class="general-section">
+                <h1>MCNR Knowledge</h1>
+                <div id="mcnrKnowledge">
+                    <!-- General Information details will be populated here -->
+                    <button id="copyMcnrKnowledgeBtn" class="copy-discord-btn">Copy Discord Message</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6TU6LIBKQ8qGq8OsH2lFc2rxbe1zB7Lm4Rigkbk0GFwr54zWY2p0YLUTQEx8d4pKl5Yiw0T9_0By7/pub?output=csv";
+
+        // Get the ID from the query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const applicationId = urlParams.get('id');
+
+        // Function to copy text to clipboard
+        function copyToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert("Copied to clipboard: " + text);
+        }
+
+        // Function to create a key detail without a copy button
+        function createKeyDetail(label, value) {
+            const detail = document.createElement('p');
+            detail.innerHTML = `<strong>${label}:</strong> <span>${value}</span>`;
+            return detail;
+        }
+
+        // Function to return to applications page
+        function goBack() {
+            window.location.href = "index.html"; // Assuming your index.html contains the list of applications
+        }
+
+        // Function to print the page
+        function printPage() {
+            window.print();
+        }
+
+        // Start loading the data
+        Papa.parse(csvUrl, {
+            download: true,
+            header: true,
+            complete: function(results) {
+                const data = results.data[applicationId];
+                const keyDetailsDiv = document.getElementById("keyDetails");
+                const generalInfoDiv = document.getElementById("generalInfo");
+                const mcnrKnowledgeDiv = document.getElementById("mcnrKnowledge");
+
+                // Hide spinner and show content once data is loaded
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.querySelector('.container').style.display = 'block';
+
+                // Display key details without copy buttons
+                keyDetailsDiv.appendChild(createKeyDetail('Timestamp', data['Timestamp']));
+                keyDetailsDiv.appendChild(createKeyDetail('In-Game Name', data['What is your name on the server?']));
+                keyDetailsDiv.appendChild(createKeyDetail('Account ID', data['What is your server account ID?']));
+                keyDetailsDiv.appendChild(createKeyDetail('Forum Name', data['What is your name on the forum?']));
+                keyDetailsDiv.appendChild(createKeyDetail('Discord Name', data['What is your Discord username?']));
+                keyDetailsDiv.appendChild(createKeyDetail('Email', data['Email Address']));
+                keyDetailsDiv.appendChild(createKeyDetail('Age', data['How old are you?']));
+                keyDetailsDiv.appendChild(createKeyDetail('Country (Timezone)', data['What country are you from?']+' ('+data['What is your country\'s timezone (GMT)?']+')'));
+
+                // Prepare the message for Discord
+                const discordMessage = `# Mod application - ${data['What is your name on the server?']}\n` +
+                    '```yaml\n' +
+                    `Application date: '${data['Timestamp']}'\n` +
+                    `Name: ${data['What is your name on the server?']}\n` +
+                    `AID: ${data['What is your server account ID?']}\n` +
+                    `Forum name: ${data['What is your name on the forum?']}\n` +
+                    `Discord: ${data['What is your Discord username?']}\n` +
+                    `Age: ${data['How old are you?']}\n` +
+                    `Country: '${data['What country are you from?']} (${data['What is your country\'s timezone (GMT)?']})'\n` +
+                    '```';
+
+                // Add copy to clipboard functionality to the Discord message button
+                document.getElementById("copyDiscordMessageBtn").onclick = function() {
+                    copyToClipboard(discordMessage);
+                };
+
+                // Display General Information
+                const generalFields = [ 'How fluent is your English?', 'What other languages can you speak, and how fluently?', 'How long have you played MCNR for?', 'How long have you played SA-MP for?', 'How many HOURS in a typical MONTH do you spend on MCNR?', 'Can you commit to meet the basic requirement of being active on the server for at least 20 hours a month?', 'Based on a GMT/UTC timezone (UK/London), what parts of the day are you available?', 'What days of the week are you available?', 'You need to be active in-game, on the forums, and on Discord. Can you meet this requirement?', 'Do you use game modifications? If so, what kind?', 'How are you an active and contributing member of the MCNR community?'];
+
+                generalFields.forEach(field => {
+                    const p = document.createElement("p");
+                    p.className = "detail-item";
+                    p.innerHTML = `<strong>${field}:</strong> ${data[field]}`;
+                    generalInfoDiv.appendChild(p);
+                });
+
+                // Prepare the General Information Discord message
+                let generalInfoMessage = "# General information\n";
+                generalFields.forEach(field => {
+                    generalInfoMessage += `Q-  **${field}** \n\`\`\`diff\n${data[field]}\n\`\`\`\n`;
+                });
+
+                // Add copy to clipboard functionality for General Information
+                document.getElementById("copyGeneralInfoBtn").onclick = function() {
+                    copyToClipboard(generalInfoMessage);
+                };
+
+                // Display MCNR Knowledge
+                const mcnrFields = ['On a scale of 1 to 10, how familiar are you with MCNR and its features?', 'Are you familiar with the rules of the server?', 'Do you have previous experience as a SA-MP server staff (or other games)?', 'Have you ever been banned from a SA-MP server?', 'Scenario: You are driving down the road when suddenly a cheater flies past in a flying tractor.', 'You robbed a player, and then that player killed you. What action(s) may you take?', 'A player has been reported by two players for cheating (teleporting). You monitor the reported player and see no evidence of cheating. Explain what action you would take against the alleged cheater AND the player(s) that reported them.', 'A player is exploiting a bug/glitch to give themselves an advantage. Explain what action you would take.', 'A cop player is constantly attacking innocent civilians, ramming into them and trying to kill them. Explain how you would handle this situation and what action you would take.', 'Explain how you would respond to the below request from a player', 'Explain in a hundred words or so why you want to join the MCNR staff team, what you can do for the server, and how you intend to fulfill your duties. Answer all these points.', 'Application Terms and Conditions'];
+
+                mcnrFields.forEach(field => {
+                    const p = document.createElement("p");
+                    p.className = "detail-item";
+                    p.innerHTML = `<strong>${field}:</strong> ${data[field]}`;
+                    mcnrKnowledgeDiv.appendChild(p);
+                });
+
+
+                let mcnrKnowledgeMessage = "# MCNR Knowledge\n";
+                mcnrFields.forEach(field => {
+                    mcnrKnowledgeMessage += `Q-  **${field}** \n\`\`\`diff\n${data[field]}\n\`\`\`\n`;
+                });
+
+                // Add copy to clipboard functionality for General Information
+                document.getElementById("copyMcnrKnowledgeBtn").onclick = function() {
+                    copyToClipboard(mcnrKnowledgeMessage);
+                };
+
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<script>
+    function checkSession() {
+        const sessionExpiry = localStorage.getItem("sessionExpiry");
+
+        const currentTime = new Date().getTime();
+
+        if (!sessionExpiry || currentTime > sessionExpiry) {
+            window.location.href = "/index.html";
+        }
+    }
+
+    checkSession();
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCNR Applications</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .app-button {
+            width: 200px;
+            height: 100px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            text-align: center;
+            color: white;
+            text-decoration: none; /* Remove underline from links */
+        }
+        .btn-tester {
+            background-color: #007bff; /* Blue for Tester */
+        }
+        .btn-mod {
+            background-color: #f4882c; /* Orange for Moderator */
+        }
+        .btn-helper {
+            background-color: #83a01d; /* Green for Helper */
+        }
+        .btn i {
+            margin-right: 8px; /* Space between icon and text */
+        }
+        /* Style for disconnect button */
+        .disconnect-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background-color: #dc3545; /* Red for disconnect */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .disconnect-btn:hover {
+            background-color: #c82333; /* Darker red on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- Disconnect Button -->
+    <button class="disconnect-btn" onclick="disconnect()">Disconnect</button>
+
+    <div class="container">
+        <h1>MCNR Applications</h1>
+
+        <a href="mod/index.html" target="_blank" class="btn app-button btn-mod">
+            <i class="fas fa-user-shield"></i>Mod Applications
+        </a>
+        <a href="tester/index.html" target="_blank" class="btn app-button btn-tester">
+            <i class="fas fa-user-check"></i>Tester Applications
+        </a>
+
+        <a href="helper/index.html" target="_blank" class="btn app-button btn-helper">
+            <i class="fas fa-user-friends"></i>Helper Applications
+        </a>
+    </div>
+
+    <script>
+        // Function to handle disconnect
+        function disconnect() {
+            // Clear session storage (or local storage) to log the user out
+            localStorage.removeItem("sessionExpiry");
+
+            // Redirect to the root (main login page)
+            window.location.href = "/index.html";
+        }
+    </script>
+</body>
+</html>

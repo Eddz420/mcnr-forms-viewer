@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tester Application Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="details-styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+</head>
+<body>
+
+    <div class="back-btn">
+        <button onclick="goBack()" class="btn btn-secondary">Back to Applications</button>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="spinner-container" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+
+    <div class="container" style="display: none; position: relative;">
+        <h1>Tester Application Details
+            <button class="print-btn" onclick="printPage()">
+                Print
+            </button>
+        </h1>
+
+        <!-- Container for the key details -->
+        <div id="keyDetails" class="key-details">
+            <!-- Button to copy the Discord message (Absolute positioned) -->
+            <button id="copyDiscordMessageBtn" class="copy-discord-btn">Copy Discord Message</button>
+            <!-- Key details will be populated here -->
+        </div>
+
+        <!-- Container for the rest of the details -->
+        <div id="details" class="details-section">
+            <div class="general-section">
+                <h1>About the applicant</h1>
+                <div id="generalInfo">
+                    <!-- General Information details will be populated here -->
+                    <button id="copyGeneralInfoBtn" class="copy-discord-btn">Copy Discord Message</button>
+                </div>
+            </div>
+            
+            <div class="general-section">
+                <h1>Scenario simulation</h1>
+                <div id="testingKnowledge">
+                    <!-- Testing Knowledge details will be populated here -->
+                    <button id="copyTestingKnowledgeBtn" class="copy-discord-btn">Copy Discord Message</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfW7Rw8V6pp5HKih-yOD-YLj2APRBVuKsjoxr5if9w_ehB1KP87ckrF7LtuPqupGx2qHB1Lb22a-ZL/pub?output=csv";
+
+        // Get the ID from the query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const applicationId = urlParams.get('id');
+
+        // Function to copy text to clipboard
+        function copyToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert("Copied to clipboard: " + text);
+        }
+
+        // Function to create a key detail without a copy button
+        function createKeyDetail(label, value) {
+            const detail = document.createElement('p');
+            detail.innerHTML = `<strong>${label}:</strong> <span>${value}</span>`;
+            return detail;
+        }
+
+        // Function to return to applications page
+        function goBack() {
+            window.location.href = "index.html"; // Assuming your index.html contains the list of applications
+        }
+
+        // Function to print the page
+        function printPage() {
+            window.print();
+        }
+
+        // Start loading the data
+        Papa.parse(csvUrl, {
+            download: true,
+            header: true,
+            complete: function(results) {
+                const data = results.data[applicationId];
+                const keyDetailsDiv = document.getElementById("keyDetails");
+                const generalInfoDiv = document.getElementById("generalInfo");
+                const testingKnowledgeDiv = document.getElementById("testingKnowledge");
+
+                // Hide spinner and show content once data is loaded
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.querySelector('.container').style.display = 'block';
+
+                // Display key details without copy buttons
+                keyDetailsDiv.appendChild(createKeyDetail('Timestamp', data['Timestamp']));
+                keyDetailsDiv.appendChild(createKeyDetail('In-Game Name', data['What is your in-game name?']));
+                keyDetailsDiv.appendChild(createKeyDetail('Account ID', data['What is your in-game account ID?']));
+                keyDetailsDiv.appendChild(createKeyDetail('Discord Name', data['What is your Discord username?']));
+                keyDetailsDiv.appendChild(createKeyDetail('Forum Name', data['What is your forum username?']));
+                keyDetailsDiv.appendChild(createKeyDetail('GitHub Username', data['What is your GitHub username?']));
+                keyDetailsDiv.appendChild(createKeyDetail('Email', data['Email Address']));
+                keyDetailsDiv.appendChild(createKeyDetail('Country (Timezone)', data['What country are you from?']+' ('+data['What is your country\'s timezone (GMT)?']+')'));
+                keyDetailsDiv.appendChild(createKeyDetail('Age', data['How old are you?']));
+
+
+                // Prepare the message for Discord
+                const discordMessage = `# Tester application - ${data['What is your in-game name?']}\n` +
+                    '```yaml\n' +
+                    `Application date: '${data['Timestamp']}'\n` +
+                    `Name: ${data['What is your in-game name?']}\n` +
+                    `AID: ${data['What is your in-game account ID?']}\n` +
+                    `Forum name: ${data['What is your forum username?']}\n` +
+                    `Discord: ${data['What is your Discord username?']}\n` +
+                    `GitHub: ${data['What is your GitHub username?']}\n` +
+                    `Email: ${data['Email Address']}\n` +
+                    `Country: '${data['What country are you from?']} (${data['What is your country\'s timezone (GMT)?']})'\n` +
+                    `Age: ${data['How old are you?']}\n` +
+
+                    '```';
+
+                // Add copy to clipboard functionality to the Discord message button
+                document.getElementById("copyDiscordMessageBtn").onclick = function() {
+                    copyToClipboard(discordMessage);
+                };
+
+                // Display General Information
+                const generalFields = [
+                    'Do you meet all the requirements to become an MCNR tester?',
+                    'How long have you played MCNR for?', 
+                    'How long have you played SA-MP for?', 
+                    'How many hours a MONTH, on average, are you able to be active on the server?', 
+                    'Do you have any previous testing or administrative experience (SA-MP or otherwise)? Please provide details.', 
+                ];
+
+                generalFields.forEach(field => {
+                    const p = document.createElement("p");
+                    p.className = "detail-item";
+                    p.innerHTML = `<strong>${field}:</strong> ${data[field]}`;
+                    generalInfoDiv.appendChild(p);
+                });
+
+                // Prepare the General Information Discord message
+                let generalInfoMessage = "# About the applicant\n";
+                generalFields.forEach(field => {
+                    generalInfoMessage += `Q-  **${field}** \n\`\`\`diff\n${data[field]}\n\`\`\`\n`;
+                });
+
+                // Add copy to clipboard functionality for General Information
+                document.getElementById("copyGeneralInfoBtn").onclick = function() {
+                    copyToClipboard(generalInfoMessage);
+                };
+
+                // Display Testing Knowledge
+                const testingFields = [
+                    'When I exit the bank I see a black screen and it never disappears. I have to relog every time I exit the bank.',
+                    'When I request my personal vehicle (Infernus), a police car spawns instead.',
+                    'My weapon skills reset to poor. I had professional level on all weapons and now they are all poor.',
+                    'I bought some armour but when I relogged it was gone.',
+                    'Explain (in many words) why you wish to become a tester and what you can do for MCNR.'
+                ];
+
+                testingFields.forEach(field => {
+                    const p = document.createElement("p");
+                    p.className = "detail-item";
+                    p.innerHTML = `<strong>${field}:</strong> ${data[field]}`;
+                    testingKnowledgeDiv.appendChild(p);
+                });
+
+                // Prepare the Testing Knowledge Discord message
+                let testingKnowledgeMessage = "# Scenario simulation\n";
+                testingFields.forEach(field => {
+                    testingKnowledgeMessage += `Q-  **${field}** \n\`\`\`diff\n${data[field]}\n\`\`\`\n`;
+                });
+
+                // Add copy to clipboard functionality for Testing Knowledge
+                document.getElementById("copyTestingKnowledgeBtn").onclick = function() {
+                    copyToClipboard(testingKnowledgeMessage);
+                };
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -38,7 +38,7 @@
         <!-- Container for the rest of the details -->
         <div id="details" class="details-section">
             <div class="general-section">
-                <h1>General Information</h1>
+                <h1>About the applicant</h1>
                 <div id="generalInfo">
                     <!-- General Information details will be populated here -->
                     <button id="copyGeneralInfoBtn" class="copy-discord-btn">Copy Discord Message</button>
@@ -46,7 +46,7 @@
             </div>
             
             <div class="general-section">
-                <h1>Testing Knowledge</h1>
+                <h1>Scenario simulation</h1>
                 <div id="testingKnowledge">
                     <!-- Testing Knowledge details will be populated here -->
                     <button id="copyTestingKnowledgeBtn" class="copy-discord-btn">Copy Discord Message</button>
@@ -142,9 +142,7 @@
                     'How long have you played MCNR for?', 
                     'How long have you played SA-MP for?', 
                     'How many hours a MONTH, on average, are you able to be active on the server?', 
-                    'How many hours per week can you dedicate to testing?', 
-                    'Do you have previous experience with testing games or software?', 
-                    'Are you familiar with GitHub and bug reporting?'
+                    'Do you have any previous testing or administrative experience (SA-MP or otherwise)? Please provide details.', 
                 ];
 
                 generalFields.forEach(field => {
@@ -155,7 +153,7 @@
                 });
 
                 // Prepare the General Information Discord message
-                let generalInfoMessage = "# General information\n";
+                let generalInfoMessage = "# About the applicant\n";
                 generalFields.forEach(field => {
                     generalInfoMessage += `Q-  **${field}** \n\`\`\`diff\n${data[field]}\n\`\`\`\n`;
                 });
@@ -167,7 +165,6 @@
 
                 // Display Testing Knowledge
                 const testingFields = [
-                    'Do you have any previous testing or administrative experience (SA-MP or otherwise)? Please provide details.',
                     'When I exit the bank I see a black screen and it never disappears. I have to relog every time I exit the bank.',
                     'When I request my personal vehicle (Infernus), a police car spawns instead.',
                     'My weapon skills reset to poor. I had professional level on all weapons and now they are all poor.',
@@ -183,7 +180,7 @@
                 });
 
                 // Prepare the Testing Knowledge Discord message
-                let testingKnowledgeMessage = "# Testing Knowledge\n";
+                let testingKnowledgeMessage = "# Scenario simulation\n";
                 testingFields.forEach(field => {
                     testingKnowledgeMessage += `Q-  **${field}** \n\`\`\`diff\n${data[field]}\n\`\`\`\n`;
                 });

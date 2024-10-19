@@ -37,3 +37,7 @@ th, td {
     height: 3rem;
     color: #f4882c; /* Spinner color set to Moderator's primary color */
 }
+/* Style for new applications */
+.new-application {
+    font-weight: bold;         /* Bold font for emphasis */
+}

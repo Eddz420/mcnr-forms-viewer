@@ -1,94 +1,127 @@
 <script>
-  function checkSession() {
-      const sessionExpiry = localStorage.getItem("sessionExpiry");
-
-      const currentTime = new Date().getTime();
-
-      if (!sessionExpiry || currentTime > sessionExpiry) {
-          window.location.href = "/index.html";
-      }
-  }
-
-  checkSession();
-</script>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MCNR Tester Applications</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-
-    <!-- Loading Spinner -->
-    <div id="loadingSpinner" class="spinner-container">
-        <div class="spinner-border text-primary" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
-    </div>
-
-    <div class="container" style="display: none;">
-        <h1>MCNR Tester Applications</h1>
-        <table class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th>Timestamp</th>
-                    <th>Email</th>
-                    <th>In-Game Name</th>
-                    <th>Account ID</th>
-                    <th>Forum Name</th>
-                    <th>Discord Name</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody id="applicationTable">
-                <!-- Data will be populated here -->
-            </tbody>
-        </table>
-    </div>
-
-    <script>
-        const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfW7Rw8V6pp5HKih-yOD-YLj2APRBVuKsjoxr5if9w_ehB1KP87ckrF7LtuPqupGx2qHB1Lb22a-ZL/pub?output=csv";
-
-        // Start loading the data
-        Papa.parse(csvUrl, {
-            download: true,
-            header: true,
-            complete: function(results) {
-                const data = results.data;
-
-                // Create an array of objects with original index
-                const indexedData = data.map((row, index) => ({ ...row, originalIndex: index }));
-
-                // Sort data by timestamp (newest first)
-                indexedData.sort((a, b) => new Date(b['Timestamp']) - new Date(a['Timestamp']));
-
-                const tableBody = document.getElementById("applicationTable");
-
-                // Hide spinner and show content once data is loaded
-                document.getElementById('loadingSpinner').style.display = 'none';
-                document.querySelector('.container').style.display = 'block';
-
-                indexedData.forEach((row) => {
-                    const tr = document.createElement("tr");
-
-                    tr.innerHTML = `
-                        <td>${row['Timestamp']}</td>
-                        <td>${row['Email Address']}</td>
-                        <td>${row['What is your in-game name?']}</td>
-                        <td>${row['What is your in-game account ID?']}</td>
-                        <td>${row['What is your forum username?']}</td>
-                        <td>${row['What is your Discord username?']}</td>
-                        <td><a href="details.html?id=${row.originalIndex}" class="btn details-btn">Details</a></td>
-                    `;
-
-                    tableBody.appendChild(tr);
-                });
-            }
-        });
-    </script>
-</body>
-</html>
+    function checkSession() {
+        const sessionExpiry = localStorage.getItem("sessionExpiry");
+  
+        const currentTime = new Date().getTime();
+  
+        if (!sessionExpiry || currentTime > sessionExpiry) {
+            window.location.href = "/index.html";
+        }
+    }
+  
+    checkSession();
+  </script>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>MCNR Tester Applications</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+      <link rel="stylesheet" href="styles.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  </head>
+  <body>
+  
+      <!-- Loading Spinner -->
+      <div id="loadingSpinner" class="spinner-container">
+          <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+          </div>
+      </div>
+  
+      <div class="container" style="display: none;">
+          <h1>MCNR Tester Applications</h1>
+          <p id="applicationsCount" style="font-weight: bold;"></p>
+          <table class="table table-striped table-bordered">
+              <thead>
+                  <tr>
+                      <th>Timestamp</th>
+                      <th>Email</th>
+                      <th>In-Game Name</th>
+                      <th>Account ID</th>
+                      <th>Forum Name</th>
+                      <th>Discord Name</th>
+                      <th>Details</th>
+                  </tr>
+              </thead>
+              <tbody id="applicationTable">
+                  <!-- Data will be populated here -->
+              </tbody>
+          </table>
+      </div>
+  
+      <script>
+          const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfW7Rw8V6pp5HKih-yOD-YLj2APRBVuKsjoxr5if9w_ehB1KP87ckrF7LtuPqupGx2qHB1Lb22a-ZL/pub?output=csv";
+  
+          // Start loading the data
+          Papa.parse(csvUrl, {
+              download: true,
+              header: true,
+              complete: function(results) {
+                  const data = results.data;
+  
+                  // Create an array of objects with original index
+                  const indexedData = data.map((row, index) => ({ ...row, originalIndex: index }));
+  
+                  // Sort data by timestamp (newest first)
+                  indexedData.sort((a, b) => new Date(b['Timestamp']) - new Date(a['Timestamp']));
+  
+                  const tableBody = document.getElementById("applicationTable");
+                  const currentMonth = new Date().getMonth();
+                  const currentYear = new Date().getFullYear();
+  
+                  let applicationsThisMonth = 0;
+  
+                  indexedData.forEach((row) => {
+                      const timestamp = new Date(row['Timestamp']);
+                      const applicationMonth = timestamp.getMonth();
+                      const applicationYear = timestamp.getFullYear();
+  
+                      // Check if the application was submitted this month
+                      if (applicationMonth === currentMonth && applicationYear === currentYear) {
+                          applicationsThisMonth++;
+  
+                          const tr = document.createElement("tr");
+                          tr.classList.add("new-application");  // Apply 'new-application' style to rows from this month
+  
+                          tr.innerHTML = `
+                              <td>${row['Timestamp']}</td>
+                              <td>${row['Email Address']}</td>
+                              <td>${row['What is your in-game name?']}</td>
+                              <td>${row['What is your in-game account ID?']}</td>
+                              <td>${row['What is your forum username?']}</td>
+                              <td>${row['What is your Discord username?']}</td>
+                              <td><a href="details.html?id=${row.originalIndex}" class="btn details-btn">Details</a></td>
+                          `;
+  
+                          tableBody.appendChild(tr);
+                      } else {
+                          const tr = document.createElement("tr");
+  
+                          tr.innerHTML = `
+                              <td>${row['Timestamp']}</td>
+                              <td>${row['Email Address']}</td>
+                              <td>${row['What is your in-game name?']}</td>
+                              <td>${row['What is your in-game account ID?']}</td>
+                              <td>${row['What is your forum username?']}</td>
+                              <td>${row['What is your Discord username?']}</td>
+                              <td><a href="details.html?id=${row.originalIndex}" class="btn details-btn">Details</a></td>
+                          `;
+  
+                          tableBody.appendChild(tr);
+                      }
+                  });
+  
+                  // Display the number of applications this month
+                  document.getElementById('applicationsCount').textContent = `Number of applications this month: ${applicationsThisMonth}`;
+  
+                  // Hide spinner and show the content
+                  document.getElementById('loadingSpinner').style.display = 'none';
+                  document.querySelector('.container').style.display = 'block';
+              }
+          });
+      </script>
+  </body>
+  </html>
+  

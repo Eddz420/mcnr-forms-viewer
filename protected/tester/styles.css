@@ -37,3 +37,7 @@ th, td {
     height: 3rem;
     color: #007bff; /* Spinner color set to Tester's primary color */
 }
+/* Style for new applications */
+.new-application {
+    font-weight: bold;         /* Bold font for emphasis */
+}

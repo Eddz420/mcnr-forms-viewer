@@ -38,3 +38,7 @@ h1 {
     margin-left: 10px;
     cursor: pointer;
 }
+/* Style for new applications */
+.new-application {
+    font-weight: bold;         /* Bold font for emphasis */
+}

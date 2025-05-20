@@ -5,38 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f4f4f4;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            font-family: Arial, sans-serif;
+            color: #333;
         }
+
         .login-container {
             background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             text-align: center;
+            width: 100%;
+            max-width: 400px;
         }
-        input[type="password"], button {
-            display: block;
-            padding: 10px;
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #444;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
             margin: 10px 0;
-            max-width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
         }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
+        .login-btn {
+            background-color: #2575fc;
+            color: white;
+        }
+
         .disconnect-btn {
-            margin-top: 20px;
             background-color: #d9534f;
             color: white;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-            width: 100%;
-            max-width: 300px;
         }
+
         .disconnect-btn:hover {
             background-color: #c9302c;
+        }
+
+        #error {
+            margin-top: 10px;
+            font-size: 14px;
+            color: red;
+        }
+
+        .app-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .app-button:hover {
+            background-color: #0056b3;
+        }
+
+        .app-button.active {
+            background-color: #0056b3;
+            color: #fff;
+            border: 2px solid #fff;
         }
     </style>
 </head>
@@ -44,20 +111,24 @@
     <div class="login-container">
         <h2>Login</h2>
         <input type="password" id="password" placeholder="Enter password">
-        <button onclick="login()">Login</button>
-        <p id="error" style="color:red;"></p>
+        <button class="login-btn" onclick="login()">Login</button>
+        <p id="error"></p>
         <button class="disconnect-btn" id="disconnectBtn" onclick="disconnect()" style="display:none;">Disconnect</button>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
-        const PASSWORD = "RockstarNorth69*"; // Your static password
+        const PASSWORD_HASH = "02d83e3dc095edcaceaacbf3eb1f39579aade36994ce1de1f75e17bb4896a0e9"; // SHA-256 hash
         const SESSION_DURATION = 60 * 60 * 1000; // 1 hour
 
         function login() {
-            const enteredPassword = document.getElementById("password").value;
+            const enteredPassword = document.getElementById("password").value.trim();
             const errorElement = document.getElementById("error");
 
-            if (enteredPassword === PASSWORD) {
+            // Hash the entered password
+            const enteredPasswordHash = CryptoJS.SHA256(enteredPassword).toString();
+
+            if (enteredPasswordHash === PASSWORD_HASH) {
                 // Set session expiration time
                 const sessionExpiry = Date.now() + SESSION_DURATION;
                 localStorage.setItem("sessionExpiry", sessionExpiry);

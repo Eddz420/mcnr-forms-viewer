@@ -22,55 +22,111 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #f8f9fa;
-        }
-        .container {
-            margin-top: 50px;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .app-button {
-            width: 200px;
-            height: 100px;
-            font-size: 20px;
             display: flex;
-            align-items: center;
             justify-content: center;
-            margin: 20px auto;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             text-align: center;
-            color: white;
-            text-decoration: none; /* Remove underline from links */
+            width: 100%;
+            max-width: 600px;
         }
-        .btn-tester {
-            background-color: #007bff; /* Blue for Tester */
+
+        h1 {
+            margin-bottom: 30px;
+            font-size: 28px;
+            color: #444;
         }
-        .btn-mod {
-            background-color: #f4882c; /* Orange for Moderator */
+
+        .app-button {
+            display: inline-flex; /* Align icon and text horizontally */
+            align-items: center; /* Center icon and text vertically */
+            justify-content: center;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            color: #333; /* Default text color */
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid transparent; /* Transparent border for hover effect */
+            background-color: #fff; /* White background */
+            transition: all 0.3s ease; /* Smooth transition for hover effects */
         }
-        .btn-helper {
-            background-color: #83a01d; /* Green for Helper */
-        }
-        .btn i {
+
+        .app-button i {
             margin-right: 8px; /* Space between icon and text */
+            font-size: 18px; /* Icon size */
         }
+
+        /* Moderator Button */
+        .app-button.mod {
+            color: #f4882c; /* Orange text */
+            border-color: #f4882c; /* Orange border */
+        }
+
+        .app-button.mod:hover {
+            background-color: #f4882c; /* Orange background on hover */
+            color: #fff; /* White text on hover */
+        }
+
+        /* Tester Button */
+        .app-button.tester {
+            color: #007bff; /* Blue text */
+            border-color: #007bff; /* Blue border */
+        }
+
+        .app-button.tester:hover {
+            background-color: #007bff; /* Blue background on hover */
+            color: #fff; /* White text on hover */
+        }
+
+        /* Helper Button */
+        .app-button.helper {
+            color: #83a01d; /* Green text */
+            border-color: #83a01d; /* Green border */
+        }
+
+        .app-button.helper:hover {
+            background-color: #83a01d; /* Green background on hover */
+            color: #fff; /* White text on hover */
+        }
+
         /* Style for disconnect button */
         .disconnect-btn {
             position: absolute;
-            top: 10px;
+            top: 20px;
             right: 20px;
-            background-color: #dc3545; /* Red for disconnect */
+            background-color: #d9534f; /* Red for disconnect */
             color: white;
             padding: 10px 20px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
+            transition: background-color 0.3s ease;
         }
+
         .disconnect-btn:hover {
-            background-color: #c82333; /* Darker red on hover */
+            background-color: #c9302c; /* Darker red on hover */
         }
     </style>
 </head>
@@ -81,16 +137,17 @@
     <div class="container">
         <h1>MCNR Applications</h1>
 
-        <a href="mod/index.html" target="_blank" class="btn app-button btn-mod">
-            <i class="fas fa-user-shield"></i>Mod Applications
-        </a>
-        <a href="tester/index.html" target="_blank" class="btn app-button btn-tester">
-            <i class="fas fa-user-check"></i>Tester Applications
-        </a>
-
-        <a href="helper/index.html" target="_blank" class="btn app-button btn-helper">
-            <i class="fas fa-user-friends"></i>Helper Applications
-        </a>
+        <div class="button-container">
+            <a href="mod/index.html" class="app-button mod">
+                <i class="fas fa-user-shield"></i> Mod Applications
+            </a>
+            <a href="tester/index.html" class="app-button tester">
+                <i class="fas fa-user-check"></i> Tester Applications
+            </a>
+            <a href="helper/index.html" class="app-button helper">
+                <i class="fas fa-user-friends"></i> Helper Applications
+            </a>
+        </div>
     </div>
 
     <script>

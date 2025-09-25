@@ -5,39 +5,66 @@
     box-sizing: border-box;
 }
 
-body {
-    background: linear-gradient(135deg, #f4882c, #ffcc80); /* Vibrant gradient background */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+html, body {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
     color: #333;
+    background-color: #f9f9f9;
+    overflow-x: hidden;
+}
+
+body {
+  background: linear-gradient(
+    135deg, 
+    rgba(244, 136, 44, 1) 0%,    /* Top-left: full brightness */
+    rgba(244, 136, 44, 0.4) 50%, /* Middle: faded */
+    rgba(244, 136, 44, 1) 100%   /* Bottom-right: bright again */
+  );
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* Loading Spinner */
+.spinner-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    padding: 20px; /* Add padding for smaller screens */
+    height: 100vh;
+    background-color: #ffffff;
 }
 
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Main Container */
 .container {
-    background-color: #fff;
-    padding: 5px;
-    border-radius: 16px; /* More rounded corners for a modern look */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Stronger shadow for depth */
-    width: 100%;
-    max-width: 1250px; /* Slightly wider container */
+    max-width: 1281px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Header */
+.container h1 {
+    font-size: 2rem;
+    color: #f4882c;
+    margin-bottom: 10px;
     text-align: center;
-    overflow-x: auto; /* Ensure table is scrollable on smaller screens */
 }
 
-h1 {
-    font-size: 32px; /* Larger font size for the title */
-    font-weight: bold;
-    color: #333;
+#applicationsCount {
+    text-align: center;
     margin-bottom: 20px;
-}
-
-p {
-    font-size: 18px;
+    font-size: 1.2rem;
     color: #555;
-    margin-bottom: 30px;
 }
 
 /* Table Styling */
@@ -45,76 +72,67 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for the table */
 }
 
-th, td {
-    text-align: center;
-    padding: 15px;
-    font-size: 16px;
-    border-bottom: 1px solid #eee;
+table thead {
+    background-color: #f4882c;
+    color: #ffffff;
 }
 
-th {
-    background-color: #f4882c; /* Moderator's primary color */
-    color: #fff;
+table th, table td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+
+/* New Application Highlight */
+.new-application {
+    background-color: #d4edda !important;
+    color: #155724;
     font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px; /* Add spacing for a modern look */
-}
-
-tr:nth-child(even) {
-    background-color: #fff8f0; /* Softer alternating row color */
-}
-
-.table tr:hover {
-    background-color: #e9ecef; /* Highlight row on hover */
 }
 
 /* Details Button */
 .details-btn {
-    color: #fff;
-    background-color: #f4882c; /* Moderator's primary color */
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #f4882c;
+    color: #ffffff;
     text-decoration: none;
-    font-size: 14px;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for a button */
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
 }
 
 .details-btn:hover {
-    background-color: #e77b29; /* Darker orange on hover */
-    transform: translateY(-3px); /* Lift effect on hover */
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+    background-color: #CF7425;
 }
 
 /* Responsive Design */
-@media only screen and (max-width: 768px) {
+@media (max-width: 768px) {
+    table {
+        font-size: 0.9rem;
+    }
+
     .container {
-        padding: 20px;
-    }
-
-    h1 {
-        font-size: 24px;
-    }
-
-    p {
-        font-size: 16px;
-    }
-
-    th, td {
-        font-size: 14px;
-        padding: 10px;
+        padding: 15px;
     }
 
     .details-btn {
-        font-size: 12px;
-        padding: 8px 12px;
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

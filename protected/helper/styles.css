@@ -5,146 +5,142 @@
     box-sizing: border-box;
 }
 
-body {
-    background: linear-gradient(135deg, #83a01d, #bcd953); /* Gradient background */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+html, body {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
     color: #333;
+    background-color: #f9f9f9;
+    overflow-x: hidden;
+}
+
+/* Body Container */
+body {
+  background: linear-gradient(
+    135deg, 
+    rgba(131, 160, 29, 1) 0%,    /* Top-left: full brightness */
+    rgba(131, 160, 29, 0.4) 50%, /* Middle: faded */
+    rgba(131, 160, 29, 1) 100%   /* Bottom-right: bright again */
+  );
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* Loading Spinner */
+.spinner-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-}
-
-.container {
-    background-color: #fff;
-    padding: 5px;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-    width: 100%;
-    max-width: 900px;
-    text-align: center;
-    overflow-x: auto;
-}
-
-h1 {
-    text-align: center;
-    font-size: 28px;
-    font-weight: bold;
-    color: #444;
-    margin-bottom: 30px;
-}
-
-/* Table Styling */
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for the table */
-}
-
-.table th, .table td {
-    padding: 15px;
-    text-align: center;
-    font-size: 16px;
-    border-bottom: 1px solid #ddd;
-}
-
-.table th {
-    background-color: #83a01d; /* Primary color for helper */
-    color: #fff;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px; /* Add spacing for a modern look */
-}
-
-.table tr:nth-child(even) {
-    background-color: #f2f2f2; /* Alternating row colors */
-}
-
-.table tr:hover {
-    background-color: #e9ecef; /* Highlight row on hover */
-}
-
-/* Details Button */
-.details-btn {
-    color: #fff;
-    background-color: #83a01d; /* Primary color for helper */
-    border: none;
-    padding: 10px 15px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-}
-
-.details-btn:hover {
-    background-color: #6e8718; /* Darker green on hover */
-}
-
-/* Spinner Styling */
-.spinner-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
+    height: 100vh;
+    background-color: #ffffff;
 }
 
 .spinner-border {
     width: 3rem;
     height: 3rem;
-    color: #83a01d; /* Spinner color matches helper theme */
 }
 
-/* Value and Button Alignment */
-.value-and-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px; /* Space between value and button */
+/* Main Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Copy Button */
-.copy-btn {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
+/* Header */
+.container h1 {
+    font-size: 2rem;
+    color: #83a01d;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+#applicationsCount {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    color: #555;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table thead {
+    background-color: #83a01d;
+    color: #ffffff;
+}
+
+table th, table td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+table tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+/* New Application Highlight */
+.new-application {
+    background-color: #d4edda !important;
+    color: #155724;
+    font-weight: bold;
+}
+
+/* Details Button */
+.details-btn {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #83a01d;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
     transition: background-color 0.3s ease;
 }
 
-.copy-btn:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-}
-
-/* New Applications Highlight */
-.new-application {
-    font-weight: bold;
-    background-color: #e6f7e6; /* Light green background for emphasis */
-    border-left: 4px solid #83a01d; /* Green border for new applications */
-    padding: 10px;
-    border-radius: 8px;
+.details-btn:hover {
+    background-color: #6c8017;
 }
 
 /* Responsive Design */
-@media only screen and (max-width: 768px) {
-    .container {
-        padding: 20px;
+@media (max-width: 768px) {
+    table {
+        font-size: 0.9rem;
     }
 
-    .table th, .table td {
-        font-size: 14px;
-        padding: 10px;
+    .container {
+        padding: 15px;
     }
 
     .details-btn {
-        font-size: 12px;
-        padding: 8px 12px;
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

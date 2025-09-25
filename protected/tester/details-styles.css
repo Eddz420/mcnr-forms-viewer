@@ -1,6 +1,6 @@
 :root {
     --primary-color: #007bff;
-    --secondary-color: #f4882c;
+    --secondary-color: #0056b3;
 }
 
 body {
@@ -85,7 +85,7 @@ h1 {
     cursor: pointer;
 }
 .back-btn button:hover {
-    background-color: #0056b3;
+    background-color: #004998;
 }
 /* Responsive design */
 @media only screen and (max-width: 768px) {
@@ -119,4 +119,8 @@ h1 {
 }
 .general-section{
     position: relative;
+}
+
+.print-btn:hover, .copy-discord-btn:hover {
+    background-color: #004998;
 }

@@ -6,7 +6,6 @@ body {
     margin-top: 50px;
     background-color: #fff;
     padding: 40px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
 h1 {
@@ -71,7 +70,7 @@ h1 {
     text-align: center;
 }
 .back-btn button {
-    background-color: #007bff;
+    background-color: #CF7425;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -80,7 +79,7 @@ h1 {
     cursor: pointer;
 }
 .back-btn button:hover {
-    background-color: #0056b3;
+    background-color: #B0621F;
 }
 /* Responsive design */
 @media only screen and (max-width: 768px) {
@@ -93,7 +92,7 @@ h1 {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: #007bff;
+    background-color: #CF7425;
     color: white;
     border: none;
     border-radius: 5px;
@@ -103,7 +102,7 @@ h1 {
 
 .print-btn{
     float: right;
-    background-color: #007bff; 
+    background-color: #CF7425; 
     color: white; 
     border: none; 
     border-radius: 5px; 
@@ -114,4 +113,8 @@ h1 {
 }
 .general-section{
     position: relative;
+}
+
+.print-btn:hover, .copy-discord-btn:hover {
+    background-color: #B0621F;
 }
